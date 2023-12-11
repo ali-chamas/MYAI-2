@@ -1,0 +1,40 @@
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body{
+    color: white;
+}
+
+.hero_font{
+@apply bg-gradient-to-r  from-orange-200 to-red-400 p-1 bg-clip-text text-transparent font-bold
+}
+html{
+    overflow-x: hidden;
+    background: #29293d;
+    scroll-behavior: smooth;
+    
+}
+body{
+  overflow-x: hidden;
+}
+::-webkit-scrollbar {
+    width: 10px;
+  }
+  
+  /* Track */
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1; 
+  }
+   
+  /* Handle */
+  ::-webkit-scrollbar-thumb {
+    background: #888; 
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555; }
+
+  
