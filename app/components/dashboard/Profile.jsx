@@ -23,7 +23,7 @@ if(user.status !=="loading"){
     
         <>
          
-       {user.status!=="loading" &&
+       {user.data &&
             <div className='bg-slate-950  border-b border-red-200 py-4 '>
               
 
