@@ -7,14 +7,23 @@ import { Loader } from '@/app/components/Loader';
 import Image from 'next/image';
 import ReactMarkdown from 'react-markdown';
 import { IoMdRefresh } from "react-icons/io";
+import { AiFillCopy } from 'react-icons/ai'
+import { TiTick } from "react-icons/ti";
 
 const CodeBody = ({color,placeholder}) => {
 
     const [input,setInput]=useState('')
     const [loading,setLoading]=useState(false)
     const [codeArray,setCodeArray]=useState([]);
+    const [copied,setCopied]=useState('')
+    const [clipbord,setClipbord]=useState('')
     const user = useSession();
 
+    const handleCopy=(copyUrl)=>{
+        setCopied(copyUrl)
+        navigator.clipboard.writeText(copyUrl)
+        setTimeout(()=>setCopied(false),3000);
+      }
 
     const generateCode=async(userInput)=>{
        
@@ -81,15 +90,27 @@ codeArray.length >=1 &&
             
             <ReactMarkdown components={{
                   pre: ({ node, ...props }) => (
-                    <div className="overflow-auto  my-2 bg-black/10 p-2 rounded-lg">
+                    <div className="overflow-auto flex items-start justify-between  my-2 bg-black/10 p-2 rounded-lg">
                       <pre {...props} />
+                        
+                      <button key={props.index} className=' right-0 top-0 bg-slate-950 rounded-full p-2 hover:opacity-80 ' onClick={()=>handleCopy(props.children[0].props.children[0])}>
+                        {
+                            copied==props.children[0].props.children[0] ? <TiTick /> :<AiFillCopy/>
+                        }
+                        
+                        
+                        </button>
+                      
                     </div>
+                    
+
                   ),
                   code: ({ node, ...props }) => (
                     <code className="bg-black/10 overflow-auto rounded-lg p-1" {...props} />
                   )
                 }} className="text-sm overflow-hidden leading-7">
                   {data.content || ""}
+                  
           </ReactMarkdown>
             
        

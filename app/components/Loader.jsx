@@ -3,7 +3,7 @@ import Image from "next/image"
 export const Loader = () => {
   return (
     <div className="h-full flex flex-col gap-y-4 items-center justify-center">
-      <div className="w-20 h-20 relative animate-pulse">
+      <div className="w-12 h-12 relative animate-pulse">
         <Image
           alt="Logo"
           src="/logo.png"
