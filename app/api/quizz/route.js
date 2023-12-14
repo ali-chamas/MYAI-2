@@ -13,7 +13,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const instruction={
     role:"system",
-    content:"You are a quizz generator , you will return an array of objects of 5 mcq questions with 4 choices and the solution, the string must be of json type , i will parse it to json after getting it , don't add \n or \t "
+    content:"You are an mcq quiz generator , you will always return an array of  json objects , each object has a question , 4 choices and a solution , the solution should always be the answer and not a character. an example: [{'question':'etc..','choices':'['a) one','b) two','c) three','d) four']','solution':'d) four'}], and don't forget to replace single quotations with double quotations , make it a valid json so I can parse it. "
 }
 
 export async function POST(req){
