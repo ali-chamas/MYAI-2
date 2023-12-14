@@ -36,7 +36,7 @@ const Sidebar = () => {
       { tools.map(tool=>(
         <Link key={tool.id} href={tool.link} className={`flex gap-5 items-center
            ${pathname===tool.link ?'':'hover:opacity-80'} cursor-pointer group relative `} onClick={()=>{setOpenSidebar(false)}}>
-          <div  className={`text-3xl p-4 transition-all duration-100   rounded-full   w-[60px] ${!openSidebar && ' hidden md:block'} ${pathname===tool.link ? ' bg-gradient-to-tr from-red-400 to-orange-600 ':'bg-slate-700 group-hover:shadow-md  group-hover:shadow-red-200'}`}>
+          <div  className={`text-3xl p-4 transition-all duration-100   rounded-full   w-[60px] ${!openSidebar && ' hidden md:block'} ${pathname===tool.link ? ` bg-gradient-to-tr from-red-400 ${tool.color} `:'bg-slate-700 group-hover:shadow-md  group-hover:shadow-red-200'}`}>
           {tool.icon}
           </div>
           

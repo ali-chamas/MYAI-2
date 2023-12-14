@@ -11,9 +11,9 @@ const page = () => {
   return (
     <div className=' w-full  flex flex-col gap-5 items-center justify-between pl-10 lg:pl-20 py-5 '>
     
-      <PageDesign title={"Code Generator"} icon={<FaCode/>} desc={"Let's solve probems!"} color={"pink"} />
+      <PageDesign title={"Code Generator"} icon={<FaCode/>} desc={"Let's solve probems!"} color={"bg-pink-700"} />
       <div className='w-full'>
-      <CodeBody color={"pink"} placeholder={"generate the sum of an array"} />
+      <CodeBody toColor={"to-pink-700"} placeholder={"generate the sum of an array"} />
       </div>
       
     </div>

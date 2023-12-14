@@ -10,19 +10,19 @@ import { IoMdRefresh } from "react-icons/io";
 import { AiFillCopy } from 'react-icons/ai'
 import { TiTick } from "react-icons/ti";
 
-const CodeBody = ({color,placeholder}) => {
+const CodeBody = ({toColor,placeholder}) => {
 
     const [input,setInput]=useState('')
     const [loading,setLoading]=useState(false)
     const [codeArray,setCodeArray]=useState([]);
     const [copied,setCopied]=useState('')
-    const [clipbord,setClipbord]=useState('')
+    
     const user = useSession();
 
     const handleCopy=(copyUrl)=>{
         setCopied(copyUrl)
         navigator.clipboard.writeText(copyUrl)
-        setTimeout(()=>setCopied(false),3000);
+        setTimeout(()=>setCopied(''),3000);
       }
 
     const generateCode=async(userInput)=>{
@@ -67,7 +67,7 @@ const CodeBody = ({color,placeholder}) => {
 
   return (
     <div className='w-full flex flex-col items-center gap-5 '>
-        <Input input={input} setInput={setInput} color={color } method={generateCode} loading={loading} placeholder={placeholder}/>
+        <Input input={input} setInput={setInput}  toColor={toColor } method={generateCode} loading={loading} placeholder={placeholder}/>
         {codeArray.length ==0 && !loading  &&  <div className='-z-10'><DashboardImage/></div>}
       {codeArray.length==0 && loading && <div className='-z-10'  ><Loader/></div> }
 
