@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Input from '../routes/Input'
 import DashboardImage from '@/app/components/dashboard/DashboardImage'
 import { useSession } from 'next-auth/react'
@@ -9,6 +9,7 @@ import ReactMarkdown from 'react-markdown';
 import { IoMdRefresh } from "react-icons/io";
 import { AiFillCopy } from 'react-icons/ai'
 import { TiTick } from "react-icons/ti";
+import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
 
 const CodeBody = ({toColor,placeholder}) => {
 
@@ -16,8 +17,16 @@ const CodeBody = ({toColor,placeholder}) => {
     const [loading,setLoading]=useState(false)
     const [codeArray,setCodeArray]=useState([]);
     const [copied,setCopied]=useState('')
-    
-    const user = useSession();
+    const [userDetails,setUserDetails]=useState(null);
+  const [trigger,setTrigger]=useState(false)
+  const [tokens,setTokens]=useState(0)
+
+  const user=useSession()
+  const fetchSession=async()=>{
+      setUserDetails(await fetchUser(user.data.user.email))
+     setTrigger(true)
+  }
+   
 
     const handleCopy=(copyUrl)=>{
         setCopied(copyUrl)
@@ -41,10 +50,11 @@ const CodeBody = ({toColor,placeholder}) => {
           
           )
           const data = await res.json()
+          console.log(data)
          if(res.ok){
           console.log('okay')
-          
-          setCodeArray((current)=>[...current,userMessage,data])
+          setTokens(t=>t+data.usage.total_tokens)
+          setCodeArray((current)=>[...current,userMessage,data.choices[0].message])
           
          }
          
@@ -63,7 +73,43 @@ const CodeBody = ({toColor,placeholder}) => {
     setCodeArray([]);
     
     }
+    useEffect(()=>{
+      if(user.status=='authenticated')
+     fetchSession()
+     
+     
+    
+    },[user.status])
+    
+     useEffect(()=>{
+      if(userDetails)
+      setTokens(userDetails.user.tokens_used)
+    },[trigger])
+    
+    useEffect(()=>{
+      if(userDetails)
+      editTokens(tokens,userDetails.user._id)
+    },[tokens])
 
+    const editTokens = async(tokens,id)=>{
+      console.log(JSON.stringify({"tokens_used":tokens}))
+      
+        try {
+          const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
+         console.log(await res.json())
+          if(res.ok){
+            
+            
+          }
+        } catch (error) {
+          console.log(error)
+        }
+       
+      
+    
+      
+    }
+    console.log(tokens)
 
   return (
     <div className='w-full flex flex-col items-center gap-5 '>

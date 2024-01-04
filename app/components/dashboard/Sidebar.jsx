@@ -1,14 +1,16 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {AiFillCaretRight} from 'react-icons/ai'
-
+import { FaCrown } from "react-icons/fa";
 import Profile from './Profile'
 import Link from 'next/link'
 import { motion as m } from 'framer-motion'
 import { usePathname } from 'next/navigation'
 
 import {tools} from '../../../utils/arrays';
+import { useSession } from 'next-auth/react'
+import { fetchUser } from '@/app/fetchFunction/fetching'
 
 
 const Sidebar = () => {
@@ -17,8 +19,25 @@ const Sidebar = () => {
 
 
   const [openSidebar,setOpenSidebar]=useState(false);
-  
-  
+  const [userDetails,setUserDetails]=useState(null);
+  const [apiLimit,setApiLimit]=useState(0)
+
+  const user=useSession()
+  const fetchSession=async()=>{
+    setUserDetails(await fetchUser(user.data.user.email))
+   
+}
+useEffect(()=>{
+  if(user.status=='authenticated')
+ fetchSession()
+ 
+ 
+
+},[user.status])
+
+
+
+  console.log(userDetails)
   return (
     <div className='h-screen '>
 
@@ -56,7 +75,16 @@ const Sidebar = () => {
       }
           </Link>
       ))}
+      {userDetails && !userDetails.user.subscribed ? <div className={`w-full gap-5 flex items-center  px-5 ${!openSidebar&& 'hidden md:block'}`}>
+        {openSidebar && <p>Free tier usage :</p>}
+          
+          <p className=' py-1 bg-slate-950 rounded-full  font-bold px-5'>{userDetails.user.api_limit} / 5</p>
+        </div>  :userDetails && userDetails.user.subscribed&&
+         <div className={`w-full gap-5 flex items-center bg-slate-950 p-3 justify-between px-5 ${!openSidebar&& 'hidden md:block'}`}>
+         {openSidebar && <p>Subscribed member </p>}
+         <div className='px-6 py-5 rounded-full text-2xl bg-yellow-600 '><FaCrown/> </div></div>}
       </div>
+      
       </div>
     {openSidebar && <div className='bg-slate-800 bg-opacity-40 backdrop-blur-sm backdrop-filter top-0 w-screen   h-screen  z-30 fixed'></div>}
       

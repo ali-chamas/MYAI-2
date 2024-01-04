@@ -3,15 +3,25 @@ import { Loader } from '@/app/components/Loader'
 import DashboardImage from '@/app/components/dashboard/DashboardImage'
 import Image from 'next/image'
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {BsArrowRight,BsDownload} from 'react-icons/bs'
 import Input from '../routes/Input'
+import { useSession } from 'next-auth/react'
+import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
 
 const ImageBody = () => {
   const [input,setInput]=useState("");
   const [image,setImage]=useState("");
   const [loading,setLoading]=useState(false);
+  const [userDetails,setUserDetails]=useState(null);
+  const [trigger,setTrigger]=useState(false)
+  const [tokens,setTokens]=useState(0)
 
+  const user=useSession()
+  const fetchSession=async()=>{
+      setUserDetails(await fetchUser(user.data.user.email))
+     setTrigger(true)
+  }
   const generateImage=async(prompt)=>{
 
     try {
@@ -24,8 +34,10 @@ const ImageBody = () => {
       
      if(res.ok){
       console.log('okay')
-      
-      setImage(await res.json())
+      const data = await res.json()
+      console.log(data)
+      setTokens(t=>t+26666)
+      setImage(data)
       
      }
      
@@ -40,6 +52,46 @@ const ImageBody = () => {
   setImage("");
   setInput("")
  }
+
+ useEffect(()=>{
+  if(user.status=='authenticated')
+ fetchSession()
+ 
+ 
+
+},[user.status])
+
+ useEffect(()=>{
+  if(userDetails)
+  setTokens(userDetails.user.tokens_used)
+},[trigger])
+
+useEffect(()=>{
+  if(userDetails)
+  editTokens(tokens,userDetails.user._id)
+},[tokens])
+
+
+
+const editTokens = async(tokens,id)=>{
+  console.log(JSON.stringify({"tokens_used":tokens}))
+  
+    try {
+      const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
+     console.log(await res.json())
+      if(res.ok){
+        
+        
+      }
+    } catch (error) {
+      console.log(error)
+    }
+   
+  
+
+  
+}
+console.log(tokens)
 
   return (
    

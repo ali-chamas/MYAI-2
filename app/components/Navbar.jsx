@@ -40,14 +40,14 @@ const Navbar = () => {
         </div>
         <div className='hidden md:flex items-center gap-7   text-lg '>
             {links.map(link=>(
-              <Link href={link.path} className='opacity-80 hover:opacity-100'>{link.title}</Link>
+              <Link key={link.id} href={link.path} className='opacity-80 hover:opacity-100'>{link.title}</Link>
             ))}
 
 
         </div>
         <div className='hidden md:flex gap-5 items-center text-2xl  '>
         {icons.map(icon=>(
-              <Link href={icon.path} target='_blank' className='opacity-80 hover:opacity-100'>{icon.title}</Link>
+              <Link key={icon.id} href={icon.path} target='_blank' className='opacity-80 hover:opacity-100'>{icon.title}</Link>
             ))}
         </div>
 

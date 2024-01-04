@@ -38,8 +38,12 @@ export const authoptions={
                         name:profile.name,
                         image:profile.avatar_url,
                         createdAt:new Date(),
-                        subscribed:false,
-                        api_limit:5,
+                        subscibed:false,
+                        subscribedAt:new Date(),
+                        tokens_used:0,
+                        banned:false,
+                        api_limit:0
+                        
                     }
                     )
                    }
@@ -49,8 +53,11 @@ export const authoptions={
                         name:profile.name,
                         image:profile.picture,
                         createdAt:new Date(),
-                        subscribed:false,
-                        api_limit:5,
+                        subscibed:false,
+                        subscribedAt:new Date(),
+                        tokens_used:0,
+                        banned:false,
+                        api_limit:0
                     }
                     )}
                 

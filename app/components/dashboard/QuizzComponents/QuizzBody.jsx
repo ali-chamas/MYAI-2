@@ -4,7 +4,8 @@ import Input from '../routes/Input'
 import DashboardImage from '../DashboardImage'
 import { Loader } from '../../Loader'
 import { IoMdRefresh } from 'react-icons/io'
-
+import { useSession } from 'next-auth/react'
+import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
 
 const QuizzBody = ({toColor,placeholder}) => {
     const [input,setInput]=useState('')
@@ -20,8 +21,20 @@ const QuizzBody = ({toColor,placeholder}) => {
     const [disableCheck,setDisableCheck]=useState(true)
     const [error,setError]=useState(false)
     const [numberOfQuestions,setNumberOfQuestions]=useState(5)
+    const [userDetails,setUserDetails]=useState(null);
+    const [trigger,setTrigger]=useState(false)
+    const [tokens,setTokens]=useState(0)
+
+    const user=useSession()
+    const fetchSession=async()=>{
+        setUserDetails(await fetchUser(user.data.user.email))
+       setTrigger(true)
+    }
     
     useEffect(()=>{
+        if(user.status=='authenticated')
+       fetchSession()
+       
         if(quizzResponse){
         try{
             setQuizzArray(JSON.parse(quizzResponse))
@@ -32,8 +45,38 @@ const QuizzBody = ({toColor,placeholder}) => {
     }
         
 }
-    },[quizzResponse])
+    },[quizzResponse,user.status])
 
+    useEffect(()=>{
+        if(userDetails)
+        setTokens(userDetails.user.tokens_used)
+    },[trigger])
+
+    useEffect(()=>{
+        if(userDetails)
+        editTokens(tokens,userDetails.user._id)
+    },[tokens])
+
+    
+
+    const editTokens = async(tokens,id)=>{
+        console.log(JSON.stringify({"tokens_used":tokens}))
+        
+          try {
+            const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
+           console.log(await res.json())
+            if(res.ok){
+              
+              
+            }
+          } catch (error) {
+            console.log(error)
+          }
+         
+        
+  
+        
+    }
 
     const generateQuizz=async(prompt)=>{
 
@@ -51,12 +94,14 @@ const QuizzBody = ({toColor,placeholder}) => {
           
           
           )
-          
+          const data =await res.json()
          if(res.ok){
           console.log('okay')
-          const data =await res.json()
-          console.log(data)
-          setQuizzResponse(data.content)
+          setTokens(t=>t+data.usage.total_tokens)
+          
+           
+          
+          setQuizzResponse(data.choices[0].message.content)
           
           
          }
@@ -153,7 +198,7 @@ const QuizzBody = ({toColor,placeholder}) => {
                         <div>
                             <div className='grid gap-2    items-center  '>
                         {quizzArray[quizzIndex].choices.map((choice,i)=>(
-                            <p key={i} className={`bg-slate-800 min-w-[200px] lg:max-w-[350px] rounded-xl  w-full py-2 px-5 cursor-pointer hover:opacity-80 text-center ${(checkResultColor &&  choice==quizzArray[quizzIndex].solution) && 'bg-green-600' } ${checkResultColor && choice==selectedChoice && selectedChoice!=quizzArray[quizzIndex].solution  ? 'bg-red-600' : selectedChoice==choice && !checkResultColor && 'bg-slate-950 opacity-80' } `} onClick={()=>select(choice)}>{choice}</p>
+                            <p key={i} className={`bg-slate-800 min-w-[200px] lg:max-w-[350px] rounded-xl  w-full py-2 px-5 cursor-pointer hover:opacity-80 text-center ${(checkResultColor &&  choice==quizzArray[quizzIndex].solution) && 'bg-green-600' } ${checkResultColor && choice==selectedChoice && selectedChoice!=quizzArray[quizzIndex].solution  ? 'bg-red-700' : selectedChoice==choice && !checkResultColor && 'bg-slate-950 opacity-80' } `} onClick={()=>select(choice)}>{choice}</p>
 
                         ))}
                         </div>

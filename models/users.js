@@ -25,9 +25,21 @@ const UsersChema = new Schema({
         type:Boolean,
         default:false
     },
+    subscribedAt:{
+        type:Date,
+       
+    },
+    tokens_used:{
+        type:Number,
+        default:0
+    },
+    banned:{
+        type:Boolean,
+        default:false
+    },
     api_limit:{
         type:Number,
-        default:3
+        default:0
     }
     
     

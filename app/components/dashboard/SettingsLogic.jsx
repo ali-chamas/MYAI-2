@@ -8,7 +8,7 @@ const SettingsLogic = () => {
 
   return (
     <div >
-        <div className='flex flex-col gap-5 items-start md:text-lg mx-5 lg:text-xl'>
+        <div className='flex flex-col gap-5 items-start md:text-lg mx-5 '>
             <ProfileSettings />
         <button className='opacity-80 hover:opacity-100'>Subscription Settings</button>
         <button className='opacity-80 hover:opacity-100'>How to Use</button>

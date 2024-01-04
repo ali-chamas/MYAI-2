@@ -1,4 +1,4 @@
-import {BsImageFill,BsMusicNoteBeamed,BsFillFileCodeFill} from 'react-icons/bs'
+import {BsImageFill,BsMusicNoteBeamed,BsFillFileCodeFill, BsMusicNote} from 'react-icons/bs'
 import {MdQuiz} from 'react-icons/md'
 import {FaFilePowerpoint} from 'react-icons/fa6'
 import { FaHome } from "react-icons/fa";
@@ -12,8 +12,9 @@ export const tools = [
     {id:1,title:'Code Generator',icon:<FaCode/>,link:'/code',desc:"Create AI generated solutions",color:'to-pink-700'},
     {id:2,title:'image generator',icon:<BsImageFill/>,link:'/image',desc:"Create awesome AI generated images",color:'to-purple-600'},
     {id:4,title:'quiz generator',icon:<MdQuiz/>,link:'/quiz',desc:"test your knowledge AI generated quizz",color:'to-yellow-500'},
+
   
-    {id:5,title:'powerpoint generator',icon:<FaFilePowerpoint/>,link:'/powerpoint',desc:"Create awesome AI generated powerpoints with awesome designs!",color:'to-red-600'},
+    
     // {id:6,title:'code generator',icon:<BsFillFileCodeFill/>,link:'/code'},
   ];
 
