@@ -6,7 +6,7 @@ import { useSession } from 'next-auth/react'
 
 
 import Settings from './Settings'
-import Image from 'next/image'
+
 
 const Profile = ({open}) => {
     
@@ -15,15 +15,18 @@ const Profile = ({open}) => {
 const [openSettings,setOpenSettings]=useState(false)
 
 let nameArray
+if(user){
 if(user.status !=="loading"){
    nameArray= String(user.data.user.name).split(" ");
+}
 }
 
   return (
     
         <>
          
-       {user.data &&
+       {user &&
+       user.status=='authenticated'&&
             <div className='bg-slate-950  border-b border-red-200 py-4 '>
               
 
