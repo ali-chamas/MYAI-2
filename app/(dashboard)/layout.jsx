@@ -7,6 +7,7 @@ import Sidebar from "../components/dashboard/Sidebar";
 import { fetchUser } from "../fetchFunction/fetching";
 import LimitReached from "../components/LimitReached";
 import BannedMessage from "../components/BannedMessage";
+import { CrispProvider } from "../components/crisp-chat/crisp-provider";
  
 
 
@@ -23,6 +24,7 @@ const DashboardLayout =async ({children})=>{
   
   return (
     <div className=" h-full">
+      <CrispProvider/>
       {user.user.banned? 
       <div className="h-screen pl-12 flex items-center justify-center">
       <BannedMessage/>

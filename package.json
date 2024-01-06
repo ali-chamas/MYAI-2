@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "crisp-sdk-web": "^1.0.21",
     "framer-motion": "^10.16.4",
     "fs": "^0.0.1-security",
     "mongodb": "^6.2.0",
