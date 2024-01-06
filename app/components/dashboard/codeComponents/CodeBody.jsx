@@ -25,6 +25,7 @@ const CodeBody = ({toColor,placeholder}) => {
   const [tokens,setTokens]=useState(0)
   const [apiLimit,setApiLimit]=useState(0)
   const [subscribed,setSubscribed]=useState(false)
+  const [banned,setBanned]=useState(false)
   const user=useSession()
   const fetchSession=async()=>{
       setUserDetails(await fetchUser(user.data.user.email))
@@ -49,7 +50,7 @@ const CodeBody = ({toColor,placeholder}) => {
         try {
           setLoading(true);
 
-          if(apiLimit<5 || subscribed){
+          if(apiLimit<5&&!banned || subscribed&&!banned){
          
           const res = await fetch(`/api/code`
           ,{method:"POST",headers:{'Content-Type': 'application/json',},body:JSON.stringify(userInput)}
@@ -91,15 +92,16 @@ const CodeBody = ({toColor,placeholder}) => {
      
      
     
-    },[user.status])
+    },[user.status,apiLimitContext])
     
      useEffect(()=>{
       if(userDetails){
       setTokens(userDetails.user.tokens_used)
       setApiLimit(userDetails.user.api_limit)
       setSubscribed(userDetails.user.subscribed)
+      setBanned(userDetails.user.banned)
       }
-    },[trigger])
+    },[trigger,apiLimitContext])
     
     useEffect(()=>{
       if(userDetails){

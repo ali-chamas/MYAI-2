@@ -1,8 +1,9 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import UserCard from './UserCard'
 import { signOut } from 'next-auth/react'
 import { webUrl } from '@/app/fetchFunction/fetching'
+import { TriggerContext } from '@/app/context/triggerContext'
 
 
 
@@ -12,7 +13,7 @@ const UserInfo = (user) => {
   
     const [users,setUsers]=useState([])
     const [trigger,setTrigger]=useState(false)
-
+  const [apiLimitContext,setApiLimitContext]=useContext(TriggerContext)
    
     const getUsers=async()=>{
       
@@ -27,7 +28,7 @@ const UserInfo = (user) => {
         getUsers()
        
         
-    },[users.length,trigger])
+    },[users.length,trigger,apiLimitContext])
 
       
   return (

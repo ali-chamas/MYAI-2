@@ -22,6 +22,7 @@ const ImageBody = () => {
   =useContext(TriggerContext);
   const [apiLimit,setApiLimit]=useState(0)
   const [subscribed,setSubscribed]=useState(false)
+  const [banned,setBanned]=useState(false)
 
   const user=useSession()
   const fetchSession=async()=>{
@@ -29,7 +30,7 @@ const ImageBody = () => {
      setTrigger(true)
   }
   const generateImage=async(prompt)=>{
-    if(apiLimit<5 || subscribed){
+    if(apiLimit<5 && !banned || subscribed&&!banned ){
     try {
       setLoading(true);
       const res = await fetch(`/api/image`
@@ -72,16 +73,17 @@ const ImageBody = () => {
  
  
 
-},[user.status])
+},[user.status,apiLimitContext])
 
  useEffect(()=>{
   if(userDetails){
   setTokens(userDetails.user.tokens_used)
   setApiLimit(userDetails.user.api_limit)
   setSubscribed(userDetails.user.subscribed)
+  setBanned(userDetails.user.banned)
           
   }
-},[trigger])
+},[trigger,apiLimitContext])
 
 useEffect(()=>{
   if(userDetails)

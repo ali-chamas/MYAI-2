@@ -4,7 +4,7 @@ import React from 'react'
 
 const UserPopup = ({user,setOpenPopup,setTrigger}) => {
 
-  
+  const [apiLimitContext,setApiLimitContext]=useContext(TriggerContext)
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
   }
@@ -34,6 +34,8 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
           if(res.ok){
             alert('updated')
             setTrigger(t=>!t)
+            setApiLimitContext(a=>!a)
+            
           }
         } catch (error) {
           
@@ -54,6 +56,7 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
         if(res.ok){
           alert('banned or unbanned')
           setTrigger(t=>!t)
+          setApiLimitContext(a=>!a)
         }
         
       } catch (error) {
@@ -73,6 +76,7 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
           if(res.ok){
             alert('deleted')
             setTrigger(t=>!t)
+            setApiLimitContext(a=>!a)
           }
           
         } catch (error) {

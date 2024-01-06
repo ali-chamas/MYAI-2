@@ -31,6 +31,7 @@ const QuizzBody = ({toColor,placeholder}) => {
     const [tokens,setTokens]=useState(0)
     const [apiLimit,setApiLimit]=useState(0)
     const [subscribed,setSubscribed]=useState(false)
+    const [banned,setBanned]=useState(false)
 
     const user=useSession()
     const fetchSession=async()=>{
@@ -52,15 +53,16 @@ const QuizzBody = ({toColor,placeholder}) => {
     }
         
 }
-    },[quizzResponse,user.status])
+    },[quizzResponse,user.status,apiLimitContext])
 
     useEffect(()=>{
         if(userDetails){
         setTokens(userDetails.user.tokens_used)
         setApiLimit(userDetails.user.api_limit)
         setSubscribed(userDetails.user.subscribed)
+        setBanned(userDetails.user.banned)
         }
-    },[trigger])
+    },[trigger,apiLimitContext])
 
     useEffect(()=>{
         if(userDetails)
@@ -90,7 +92,7 @@ const QuizzBody = ({toColor,placeholder}) => {
 
     const generateQuizz=async(prompt)=>{
 
-        if(apiLimit<5 || subscribed){
+        if(apiLimit<5&&!banned || subscribed&&banned){
         setCheckResultcolor(false);
         setQuizzArray([]);
         setQuizzIndex(0);
