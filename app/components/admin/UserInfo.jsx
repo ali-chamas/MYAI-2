@@ -8,7 +8,7 @@ import { signOut } from 'next-auth/react'
 
 const UserInfo = (user) => {
 
-  const webUrl='http://localhost:3000'
+  const webUrl='https://merry-narwhal-231aae.netlify.app'
     const [users,setUsers]=useState([])
     const [trigger,setTrigger]=useState(false)
 

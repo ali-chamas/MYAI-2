@@ -3,7 +3,7 @@ import React from 'react'
 
 const UserPopup = ({user,setOpenPopup,setTrigger}) => {
 
-  const webUrl='http://localhost:3000'
+  const webUrl='https://merry-narwhal-231aae.netlify.app'
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
   }
