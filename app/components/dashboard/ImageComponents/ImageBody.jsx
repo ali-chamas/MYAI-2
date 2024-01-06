@@ -78,6 +78,7 @@ const ImageBody = () => {
   if(userDetails){
   setTokens(userDetails.user.tokens_used)
   setApiLimit(userDetails.user.api_limit)
+  setSubscribed(userDetails.user.subscribed)
           
   }
 },[trigger])
