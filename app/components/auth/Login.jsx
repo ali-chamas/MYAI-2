@@ -3,7 +3,10 @@ import { signIn} from 'next-auth/react'
 import React from 'react'
 import {AiFillGithub,AiOutlineGoogle} from 'react-icons/ai'
 const Login = () => {
-  
+  const handleLogin=(e,provider)=>{
+    e.preventDefault();
+    signIn(provider);
+  }
   
   return (
     
@@ -12,13 +15,13 @@ const Login = () => {
 
       <div className='flex flex-col gap-5  items-center my-8  md:text-lg'>
 
-          <button className='flex gap-2 items-center py-5 px-7 border text-black bg-white shadow-md hover:opacity-90 rounded-md' onClick={()=>signIn('google')}>
+          <button className='flex gap-2 items-center py-5 px-7 border text-black bg-white shadow-md hover:opacity-90 rounded-md' onClick={(e)=>handleLogin(e,'google')}>
 
           <p className='font-bold '>Sign in with Google</p>
             <AiOutlineGoogle className='text-2xl md:text-3xl lg:text-4xl'/>
           </button>
         
-          <button className='flex gap-2 items-center py-5 px-7 border text-white bg-black shadow-md hover:opacity-90 rounded-md' onClick={()=>signIn('github')}>
+          <button className='flex gap-2 items-center py-5 px-7 border text-white bg-black shadow-md hover:opacity-90 rounded-md' onClick={()=>(e)=>handleLogin(e,'github')}>
 
           <p className='font-bold '>Sign in with Github</p>
             <AiFillGithub className='text-2xl md:text-3xl lg:text-4xl'/>
