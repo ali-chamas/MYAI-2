@@ -15,12 +15,12 @@ export async function GET(){
 }
 export async function PUT(req){
 
-    const {subscribed,banned,tokens_used,subscribedAt} = await req.json();
+    const {subscribed,banned,tokens_used,subscribedAt,api_limit} = await req.json();
     const id=req.nextUrl.searchParams.get('id');
     try {
         await connectDB();
      await Users.findByIdAndUpdate(
-        id,{$set:{subscribed:subscribed,banned:banned,tokens_used:tokens_used,subscribedAt:subscribedAt}}
+        id,{$set:{subscribed:subscribed,banned:banned,tokens_used:tokens_used,subscribedAt:subscribedAt,api_limit:api_limit}}
     );
     return NextResponse.json('updated',{status:200})
     } catch (error) {

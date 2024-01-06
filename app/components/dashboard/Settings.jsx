@@ -10,7 +10,7 @@ const Settings = ({setOpen}) => {
 <div className='bg-slate-800 max-w-[400px] h-auto p-5 opacity-100  rounded-lg shadow-sm shadow-orange-300  z-50'>
     <div className='relative top-0 left-[80%] cursor-pointer hover:opacity-80 mb-3 text-2xl md:text-3xl  max-w-[40px] ' onClick={()=>setOpen(false)}><AiOutlineClose/></div>
         
-           <SettingsLogic/>
+           <SettingsLogic setOpen={setOpen}/>
         
 </div>
 

@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Input from '../routes/Input'
 import DashboardImage from '@/app/components/dashboard/DashboardImage'
 import { useSession } from 'next-auth/react'
@@ -10,29 +10,34 @@ import { IoMdRefresh } from "react-icons/io";
 import { AiFillCopy } from 'react-icons/ai'
 import { TiTick } from "react-icons/ti";
 import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
+import { TriggerContext } from '@/app/context/triggerContext'
 
 const CodeBody = ({toColor,placeholder}) => {
+  const {apiLimitContext,setApiLimitContext}=useContext(TriggerContext);
 
     const [input,setInput]=useState('')
     const [loading,setLoading]=useState(false)
     const [codeArray,setCodeArray]=useState([]);
     const [copied,setCopied]=useState('')
     const [userDetails,setUserDetails]=useState(null);
-  const [trigger,setTrigger]=useState(false)
+  
+    const [trigger,setTrigger]=useState(false)
   const [tokens,setTokens]=useState(0)
-
+  const [apiLimit,setApiLimit]=useState(0)
+  const [subscribed,setSubscribed]=useState(false)
   const user=useSession()
   const fetchSession=async()=>{
       setUserDetails(await fetchUser(user.data.user.email))
      setTrigger(true)
   }
-   
+  
 
     const handleCopy=(copyUrl)=>{
         setCopied(copyUrl)
         navigator.clipboard.writeText(copyUrl)
         setTimeout(()=>setCopied(''),3000);
       }
+      
 
     const generateCode=async(userInput)=>{
        
@@ -43,6 +48,8 @@ const CodeBody = ({toColor,placeholder}) => {
         
         try {
           setLoading(true);
+
+          if(apiLimit<5 || subscribed){
          
           const res = await fetch(`/api/code`
           ,{method:"POST",headers:{'Content-Type': 'application/json',},body:JSON.stringify(userInput)}
@@ -50,12 +57,17 @@ const CodeBody = ({toColor,placeholder}) => {
           
           )
           const data = await res.json()
-          console.log(data)
+         
          if(res.ok){
           console.log('okay')
           setTokens(t=>t+data.usage.total_tokens)
-          setCodeArray((current)=>[...current,userMessage,data.choices[0].message])
+          setApiLimit(a=>a+1)
           
+          setCodeArray((current)=>[...current,userMessage,data.choices[0].message])
+         }
+         }
+         else{
+          alert('sorry limit exceeded')
          }
          
         } catch (error) {
@@ -82,23 +94,28 @@ const CodeBody = ({toColor,placeholder}) => {
     },[user.status])
     
      useEffect(()=>{
-      if(userDetails)
+      if(userDetails){
       setTokens(userDetails.user.tokens_used)
+      setApiLimit(userDetails.user.api_limit)
+      setSubscribed(userDetails.user.subscribed)
+      }
     },[trigger])
     
     useEffect(()=>{
-      if(userDetails)
+      if(userDetails){
       editTokens(tokens,userDetails.user._id)
+      
+      }
     },[tokens])
 
     const editTokens = async(tokens,id)=>{
-      console.log(JSON.stringify({"tokens_used":tokens}))
+      
       
         try {
-          const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
-         console.log(await res.json())
+          const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit})})
+         
           if(res.ok){
-            
+            setApiLimitContext(a=>!a)
             
           }
         } catch (error) {
@@ -109,7 +126,7 @@ const CodeBody = ({toColor,placeholder}) => {
     
       
     }
-    console.log(tokens)
+    
 
   return (
     <div className='w-full flex flex-col items-center gap-5 '>

@@ -3,11 +3,12 @@ import { Loader } from '@/app/components/Loader'
 import DashboardImage from '@/app/components/dashboard/DashboardImage'
 import Image from 'next/image'
 
-import React, { useEffect, useState } from 'react'
-import {BsArrowRight,BsDownload} from 'react-icons/bs'
+import React, { useContext, useEffect, useState } from 'react'
+import {BsDownload} from 'react-icons/bs'
 import Input from '../routes/Input'
 import { useSession } from 'next-auth/react'
 import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
+import { TriggerContext } from '@/app/context/triggerContext'
 
 const ImageBody = () => {
   const [input,setInput]=useState("");
@@ -17,13 +18,18 @@ const ImageBody = () => {
   const [trigger,setTrigger]=useState(false)
   const [tokens,setTokens]=useState(0)
 
+  const {apiLimitContext,setApiLimitContext}
+  =useContext(TriggerContext);
+  const [apiLimit,setApiLimit]=useState(0)
+  const [subscribed,setSubscribed]=useState(false)
+
   const user=useSession()
   const fetchSession=async()=>{
       setUserDetails(await fetchUser(user.data.user.email))
      setTrigger(true)
   }
   const generateImage=async(prompt)=>{
-
+    if(apiLimit<5 || subscribed){
     try {
       setLoading(true);
       const res = await fetch(`/api/image`
@@ -35,14 +41,21 @@ const ImageBody = () => {
      if(res.ok){
       console.log('okay')
       const data = await res.json()
-      console.log(data)
+    
       setTokens(t=>t+26666)
+      setApiLimit(a=>a+1)
+          
       setImage(data)
       
      }
      
-    } catch (error) {
+    } 
+    
+    
+    catch (error) {
       console.log(error)
+    }}else{
+      alert('sorry limit exceeded')
     }
     setInput("")
     setLoading(false)
@@ -62,8 +75,11 @@ const ImageBody = () => {
 },[user.status])
 
  useEffect(()=>{
-  if(userDetails)
+  if(userDetails){
   setTokens(userDetails.user.tokens_used)
+  setApiLimit(userDetails.user.api_limit)
+          
+  }
 },[trigger])
 
 useEffect(()=>{
@@ -74,14 +90,14 @@ useEffect(()=>{
 
 
 const editTokens = async(tokens,id)=>{
-  console.log(JSON.stringify({"tokens_used":tokens}))
+  
   
     try {
-      const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
+      const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit})})
      console.log(await res.json())
       if(res.ok){
         
-        
+        setApiLimitContext(a=>!a)
       }
     } catch (error) {
       console.log(error)
@@ -91,7 +107,7 @@ const editTokens = async(tokens,id)=>{
 
   
 }
-console.log(tokens)
+
 
   return (
    

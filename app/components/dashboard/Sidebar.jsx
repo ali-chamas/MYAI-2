@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import {AiFillCaretRight} from 'react-icons/ai'
 import { FaCrown } from "react-icons/fa";
 import Profile from './Profile'
@@ -11,6 +11,7 @@ import { usePathname } from 'next/navigation'
 import {tools} from '../../../utils/arrays';
 import { useSession } from 'next-auth/react'
 import { fetchUser } from '@/app/fetchFunction/fetching'
+import { TriggerContext } from '@/app/context/triggerContext';
 
 
 const Sidebar = () => {
@@ -20,8 +21,9 @@ const Sidebar = () => {
 
   const [openSidebar,setOpenSidebar]=useState(false);
   const [userDetails,setUserDetails]=useState(null);
-  const [apiLimit,setApiLimit]=useState(0)
-
+  const [apiLimit,setApiLimit] =useState(0)
+  const {apiLimitContext}=useContext(TriggerContext)
+  
   const user=useSession()
   const fetchSession=async()=>{
     setUserDetails(await fetchUser(user.data.user.email))
@@ -30,12 +32,18 @@ const Sidebar = () => {
 useEffect(()=>{
   if(user.status=='authenticated')
  fetchSession()
+ console.log('triggered 1')
  
  
 
-},[user.status])
+},[user.status,apiLimitContext])
 
-
+useEffect(()=>{
+  if(userDetails){
+    setApiLimit(userDetails.user.api_limit)
+    console.log('triggered 2')
+  }
+},[userDetails,apiLimitContext])
 
   console.log(userDetails)
   return (
@@ -78,11 +86,11 @@ useEffect(()=>{
       {userDetails && !userDetails.user.subscribed ? <div className={`w-full gap-5 flex items-center  px-5 ${!openSidebar&& 'hidden md:block'}`}>
         {openSidebar && <p>Free tier usage :</p>}
           
-          <p className=' py-1 bg-slate-950 rounded-full  font-bold px-5'>{userDetails.user.api_limit} / 5</p>
+          <p className=' py-1 bg-slate-950 rounded-full  font-bold px-5'>{apiLimit} / 5</p>
         </div>  :userDetails && userDetails.user.subscribed&&
          <div className={`w-full gap-5 flex items-center bg-slate-950 p-3 justify-between px-5 ${!openSidebar&& 'hidden md:block'}`}>
          {openSidebar && <p>Subscribed member </p>}
-         <div className='px-6 py-5 rounded-full text-2xl bg-yellow-600 '><FaCrown/> </div></div>}
+         <div className='px-[25px] py-3 rounded-full text-xl bg-yellow-600 '><FaCrown/> </div></div>}
       </div>
       
       </div>

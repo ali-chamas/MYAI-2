@@ -1,13 +1,18 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import Input from '../routes/Input'
 import DashboardImage from '../DashboardImage'
 import { Loader } from '../../Loader'
 import { IoMdRefresh } from 'react-icons/io'
 import { useSession } from 'next-auth/react'
 import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
+import { TriggerContext } from '@/app/context/triggerContext'
 
 const QuizzBody = ({toColor,placeholder}) => {
+
+
+    const {apiLimitContext,setApiLimitContext}=useContext(TriggerContext);
+
     const [input,setInput]=useState('')
     const [loading,setLoading]=useState(false)
     const [quizzResponse,setQuizzResponse]=useState('')
@@ -24,6 +29,8 @@ const QuizzBody = ({toColor,placeholder}) => {
     const [userDetails,setUserDetails]=useState(null);
     const [trigger,setTrigger]=useState(false)
     const [tokens,setTokens]=useState(0)
+    const [apiLimit,setApiLimit]=useState(0)
+    const [subscribed,setSubscribed]=useState(false)
 
     const user=useSession()
     const fetchSession=async()=>{
@@ -48,8 +55,10 @@ const QuizzBody = ({toColor,placeholder}) => {
     },[quizzResponse,user.status])
 
     useEffect(()=>{
-        if(userDetails)
+        if(userDetails){
         setTokens(userDetails.user.tokens_used)
+        setApiLimit(userDetails.user.api_limit)
+        }
     },[trigger])
 
     useEffect(()=>{
@@ -60,14 +69,14 @@ const QuizzBody = ({toColor,placeholder}) => {
     
 
     const editTokens = async(tokens,id)=>{
-        console.log(JSON.stringify({"tokens_used":tokens}))
+        console.log(JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit}))
         
           try {
-            const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens})})
+            const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit})})
            console.log(await res.json())
             if(res.ok){
               
-              
+                setApiLimitContext(a=>!a)
             }
           } catch (error) {
             console.log(error)
@@ -80,7 +89,7 @@ const QuizzBody = ({toColor,placeholder}) => {
 
     const generateQuizz=async(prompt)=>{
 
-        
+        if(apiLimit<5 || subscribed){
         setCheckResultcolor(false);
         setQuizzArray([]);
         setQuizzIndex(0);
@@ -99,7 +108,7 @@ const QuizzBody = ({toColor,placeholder}) => {
           console.log('okay')
           setTokens(t=>t+data.usage.total_tokens)
           
-           
+          setApiLimit(a=>a+1)
           
           setQuizzResponse(data.choices[0].message.content)
           
@@ -109,6 +118,9 @@ const QuizzBody = ({toColor,placeholder}) => {
         } catch (error) {
           console.log(error)
         }
+    }else{
+        alert('sorry limit exceeded')
+    }
         setInput("")
         setLoading(false)
       }
