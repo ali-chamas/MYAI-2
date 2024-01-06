@@ -6,6 +6,7 @@ import GitHubProvider from "next-auth/providers/github";
 
 export const authoptions={
     secret: process.env.NEXTAUTH_SECRET,
+    URL:process.env.NEXTAUTH_URL,
     providers:[
         GoogleProvider({
             clientId:process.env.GOOGLE_CLIENT_ID,

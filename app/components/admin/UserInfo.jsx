@@ -2,13 +2,14 @@
 import React, { useEffect, useState } from 'react'
 import UserCard from './UserCard'
 import { signOut } from 'next-auth/react'
+import { webUrl } from '@/app/fetchFunction/fetching'
 
 
 
 
 const UserInfo = (user) => {
 
-  const webUrl='https://merry-narwhal-231aae.netlify.app'
+  
     const [users,setUsers]=useState([])
     const [trigger,setTrigger]=useState(false)
 
@@ -24,7 +25,7 @@ const UserInfo = (user) => {
       }
       useEffect(()=>{
         getUsers()
-        console.log('done')
+       
         
     },[users.length,trigger])
 

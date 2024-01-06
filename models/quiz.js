@@ -2,17 +2,9 @@ import { Schema,model,models } from "mongoose";
 
 const QuizSchema = new Schema({
     
-    question:{
-        type:String,
-        default:''
-    },
-    choices:{
+    quizzArray:{
         type:Array,
         default:[]
-    },
-    solution:{
-        type:String,
-        default:''
     }
     
     
@@ -20,4 +12,4 @@ const QuizSchema = new Schema({
 });
 
 const Quiz=models.Quiz || model('Quiz',QuizSchema);
-export default Users;
+export default Quiz;

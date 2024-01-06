@@ -59,7 +59,7 @@ const CodeBody = ({toColor,placeholder}) => {
           const data = await res.json()
          
          if(res.ok){
-          console.log('okay')
+          
           setTokens(t=>t+data.usage.total_tokens)
           setApiLimit(a=>a+1)
           

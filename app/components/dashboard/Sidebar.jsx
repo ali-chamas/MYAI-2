@@ -32,7 +32,7 @@ const Sidebar = () => {
 useEffect(()=>{
   if(user.status=='authenticated')
  fetchSession()
- console.log('triggered 1')
+ 
  
  
 
@@ -41,11 +41,11 @@ useEffect(()=>{
 useEffect(()=>{
   if(userDetails){
     setApiLimit(userDetails.user.api_limit)
-    console.log('triggered 2')
+
   }
 },[userDetails,apiLimitContext])
 
-  console.log(userDetails)
+  
   return (
     <div className='h-screen '>
 

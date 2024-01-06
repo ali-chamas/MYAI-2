@@ -39,7 +39,7 @@ const ImageBody = () => {
       )
       
      if(res.ok){
-      console.log('okay')
+      
       const data = await res.json()
     
       setTokens(t=>t+26666)
@@ -95,7 +95,7 @@ const editTokens = async(tokens,id)=>{
   
     try {
       const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit})})
-     console.log(await res.json())
+    
       if(res.ok){
         
         setApiLimitContext(a=>!a)

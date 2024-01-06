@@ -70,11 +70,11 @@ const QuizzBody = ({toColor,placeholder}) => {
     
 
     const editTokens = async(tokens,id)=>{
-        console.log(JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit}))
+        
         
           try {
             const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"tokens_used":tokens,"api_limit":apiLimit})})
-           console.log(await res.json())
+           
             if(res.ok){
               
                 setApiLimitContext(a=>!a)
@@ -106,7 +106,7 @@ const QuizzBody = ({toColor,placeholder}) => {
           )
           const data =await res.json()
          if(res.ok){
-          console.log('okay')
+          
           setTokens(t=>t+data.usage.total_tokens)
           
           setApiLimit(a=>a+1)
@@ -211,7 +211,10 @@ const QuizzBody = ({toColor,placeholder}) => {
                         <div>
                             <div className='grid gap-2    items-center  '>
                         {quizzArray[quizzIndex].choices.map((choice,i)=>(
-                            <p key={i} className={`bg-slate-800 min-w-[200px] lg:max-w-[350px] rounded-xl  w-full py-2 px-5 cursor-pointer hover:opacity-80 text-center ${(checkResultColor &&  choice==quizzArray[quizzIndex].solution) && 'bg-green-600' } ${checkResultColor && choice==selectedChoice && selectedChoice!=quizzArray[quizzIndex].solution  ? 'bg-red-700' : selectedChoice==choice && !checkResultColor && 'bg-slate-950 opacity-80' } `} onClick={()=>select(choice)}>{choice}</p>
+                            <p key={i} className={` min-w-[200px] lg:max-w-[350px] rounded-xl  w-full py-2 px-5 cursor-pointer hover:opacity-80 text-center ${checkResultColor ?
+                                choice==quizzArray[quizzIndex].solution?'bg-green-600' : selectedChoice==choice? 'bg-red-600':'bg-slate-800' : selectedChoice==choice? 'bg-slate-950':'bg-slate-800'}
+                          
+                             `} onClick={()=>select(choice)}>{choice}</p>
 
                         ))}
                         </div>

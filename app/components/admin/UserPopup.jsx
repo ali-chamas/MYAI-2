@@ -1,9 +1,10 @@
 'use client'
+import { webUrl } from '@/app/fetchFunction/fetching';
 import React from 'react'
 
 const UserPopup = ({user,setOpenPopup,setTrigger}) => {
 
-  const webUrl='https://merry-narwhal-231aae.netlify.app'
+  
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
   }
@@ -29,13 +30,13 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
       if(confirmed){
         try {
           const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"subscribed":subscribe,"banned":banned,"tokens_used":tokens_used,"subscribedAt":subscribedAt})})
-         console.log(await res.json())
+         
           if(res.ok){
             alert('updated')
             setTrigger(t=>!t)
           }
         } catch (error) {
-          console.log(error)
+          
         }
        
       }
@@ -49,7 +50,7 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
     if(confirmed){
       try {
         const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"PUT",headers:{"Content-type":"application/json"},body:JSON.stringify({"subscribed":subscribe,"banned":banned,"tokens_used":tokens_used})})
-       console.log(await res.json())
+      
         if(res.ok){
           alert('banned or unbanned')
           setTrigger(t=>!t)
@@ -68,7 +69,7 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
       if(confirmed){
         try {
           const res = await fetch(`${webUrl}/api/users?id=${id}`,{method:"DELETE"})
-         console.log(await res.json())
+         
           if(res.ok){
             alert('deleted')
             setTrigger(t=>!t)
