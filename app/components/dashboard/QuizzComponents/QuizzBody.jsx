@@ -62,7 +62,14 @@ const QuizzBody = ({toColor,placeholder}) => {
         setSubscribed(userDetails.user.subscribed)
         setBanned(userDetails.user.banned)
         }
-    },[trigger,apiLimitContext])
+    },[trigger])
+
+    useEffect(()=>{
+        if(userDetails){
+        
+        setBanned(userDetails.user.banned)
+        }
+      },[apiLimitContext])
 
     useEffect(()=>{
         if(userDetails)

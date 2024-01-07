@@ -83,7 +83,13 @@ const ImageBody = () => {
   setBanned(userDetails.user.banned)
           
   }
-},[trigger,apiLimitContext])
+},[trigger])
+useEffect(()=>{
+  if(userDetails){
+  
+  setBanned(userDetails.user.banned)
+  }
+},[apiLimitContext])
 
 useEffect(()=>{
   if(userDetails)
@@ -130,7 +136,7 @@ const editTokens = async(tokens,id)=>{
       
       <div className="flex flex-col items-center  gap-5">
         <div className='relative mt-20 md:mt-0  w-[250px] h-[250px] md:w-[350px] md:h-[350px] -z-20'>
-      <Image  loader={() => image} src={image} fill alt='' className='z-0 rounded-[30%]'/>
+      <Image  loader={() => image} src={image} fill alt='' className='z-0 rounded-xl'/>
       
       </div>
       <button className='p-2 px-6 flex gap-1 bg-slate-600  rounded-full hover:opacity-90' onClick={()=>window.open(image)}>Download <BsDownload/></button>

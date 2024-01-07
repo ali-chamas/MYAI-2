@@ -18,11 +18,11 @@ const page =async () => {
     redirect('/dashboard')
   }
   return (
-    <div className='flex flex-col w-full items-center py-5'>
+    <div className='flex flex-col w-full items-center py-5 gap-5 '>
             <h1 className='text-2xl font-bold lg:text-4xl hero_font'>
                 Hello Admin!
             </h1>
-            <div className='flex flex-col md:flex-row justify-between'>
+            <div className=' w-full '>
             <UserInfo/>
             
             </div>

@@ -11,16 +11,17 @@ import { AiFillCopy } from 'react-icons/ai'
 import { TiTick } from "react-icons/ti";
 import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
 import { TriggerContext } from '@/app/context/triggerContext'
+import axios from 'axios'
 
 const CodeBody = ({toColor,placeholder}) => {
   const {apiLimitContext,setApiLimitContext}=useContext(TriggerContext);
 
     const [input,setInput]=useState('')
     const [loading,setLoading]=useState(false)
-    const [codeArray,setCodeArray]=useState([]);
+    
     const [copied,setCopied]=useState('')
     const [userDetails,setUserDetails]=useState(null);
-  
+  const [messages,setMessages]=useState([])
     const [trigger,setTrigger]=useState(false)
   const [tokens,setTokens]=useState(0)
   const [apiLimit,setApiLimit]=useState(0)
@@ -39,32 +40,31 @@ const CodeBody = ({toColor,placeholder}) => {
         setTimeout(()=>setCopied(''),3000);
       }
       
-
+      console.log(messages)
     const generateCode=async(userInput)=>{
        
        
         const userMessage = {role:'user',content:input};
         
-        
+        const newMessages=[...messages,userMessage]
         
         try {
           setLoading(true);
 
           if(apiLimit<5&&!banned || subscribed&&!banned){
          
-          const res = await fetch(`/api/code`
-          ,{method:"POST",headers:{'Content-Type': 'application/json',},body:JSON.stringify(userInput)}
+            const res = await axios.post('/api/code', { messages: newMessages });
          
           
-          )
-          const data = await res.json()
-         
+          
+          const data =await  res.data
+          setMessages((current) => [...current, userMessage, data.choices[0].message])
          if(res.ok){
           
           setTokens(t=>t+data.usage.total_tokens)
           setApiLimit(a=>a+1)
           
-          setCodeArray((current)=>[...current,userMessage,data.choices[0].message])
+          
          }
          }
          else{
@@ -101,7 +101,13 @@ const CodeBody = ({toColor,placeholder}) => {
       setSubscribed(userDetails.user.subscribed)
       setBanned(userDetails.user.banned)
       }
-    },[trigger,apiLimitContext])
+    },[trigger])
+    useEffect(()=>{
+      if(userDetails){
+      
+      setBanned(userDetails.user.banned)
+      }
+    },[apiLimitContext])
     
     useEffect(()=>{
       if(userDetails){
@@ -133,19 +139,19 @@ const CodeBody = ({toColor,placeholder}) => {
   return (
     <div className='w-full flex flex-col items-center gap-5 '>
         <Input input={input} setInput={setInput}  toColor={toColor } method={generateCode} loading={loading} placeholder={placeholder}/>
-        {codeArray.length ==0 && !loading  &&  <div className='-z-10'><DashboardImage/></div>}
-      {codeArray.length==0 && loading && <div className='-z-10'  ><Loader/></div> }
+        {messages.length ==0 && !loading  &&  <div className='-z-10'><DashboardImage/></div>}
+      {messages.length==0 && loading && <div className='-z-10'  ><Loader/></div> }
 
       {
 
-codeArray.length >=1 && 
+messages.length >=1 && 
 
 
 <div className='flex flex-col-reverse gap-y-4 items-center  md:min-w-[500px] w-auto max-w-full  '>
 
 
-{codeArray.map(data=>(
-  data!=undefined&&
+{messages.map(data=>(
+  
   
   data.role =='assistant'? 
   

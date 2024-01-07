@@ -1,10 +1,11 @@
 'use client'
+import { TriggerContext } from '@/app/context/triggerContext';
 import { webUrl } from '@/app/fetchFunction/fetching';
-import React from 'react'
+import React, { useContext } from 'react'
 
 const UserPopup = ({user,setOpenPopup,setTrigger}) => {
 
-  const [apiLimitContext,setApiLimitContext]=useContext(TriggerContext)
+  const {apiLimitContext,setApiLimitContext}=useContext(TriggerContext)
   function padTo2Digits(num) {
     return num.toString().padStart(2, '0');
   }

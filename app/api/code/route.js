@@ -21,14 +21,11 @@ export async function POST(req){
     try{
         
         
-        const message =JSON.stringify(await req.json());
-
+        const body=await req.json()
+        const { messages  } = body;
         const res = await openai.createChatCompletion({
             model:'gpt-3.5-turbo',
-           messages:[
-            instruction, {role:'user',content:message}
-            
-           ]
+           messages:[instruction, ...messages ]
             
         });        
         
@@ -38,6 +35,6 @@ export async function POST(req){
     }
     catch(err){
         console.log(err);
-        return new NextResponse(err,{status:500})
+        return new NextResponse.json((err,{status:500}))
     }
 }

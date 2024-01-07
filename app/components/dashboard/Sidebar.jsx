@@ -23,6 +23,7 @@ const Sidebar = () => {
   const [userDetails,setUserDetails]=useState(null);
   const [apiLimit,setApiLimit] =useState(0)
   const {apiLimitContext}=useContext(TriggerContext)
+  const [subscribed,setSubscribed]=useState(false)
   
   const user=useSession()
   const fetchSession=async()=>{
@@ -41,7 +42,8 @@ useEffect(()=>{
 useEffect(()=>{
   if(userDetails){
     setApiLimit(userDetails.user.api_limit)
-
+    setSubscribed(userDetails.user.subscribed)
+    console.log('triggered')
   }
 },[userDetails,apiLimitContext])
 
@@ -83,11 +85,11 @@ useEffect(()=>{
       }
           </Link>
       ))}
-      {userDetails && !userDetails.user.subscribed ? <div className={`w-full gap-5 flex items-center  px-5 ${!openSidebar&& 'hidden md:block'}`}>
+      {userDetails && !subscribed ? <div className={`w-full gap-5 flex items-center  px-5 ${!openSidebar&& 'hidden md:block'}`}>
         {openSidebar && <p>Free tier usage :</p>}
           
           <p className=' py-1 bg-slate-950 rounded-full  font-bold px-5'>{apiLimit} / 5</p>
-        </div>  :userDetails && userDetails.user.subscribed&&
+        </div>  :userDetails && subscribed&&
          <div className={`w-full gap-5 flex items-center bg-slate-950 p-3 justify-between px-5 ${!openSidebar&& 'hidden md:block'}`}>
          {openSidebar && <p>Subscribed member </p>}
          <div className='px-[25px] py-3 rounded-full text-xl bg-yellow-600 '><FaCrown/> </div></div>}
