@@ -99,7 +99,7 @@ const QuizzBody = ({toColor,placeholder}) => {
 
     const generateQuizz=async(prompt)=>{
 
-        if(apiLimit<5&&!banned || subscribed&&banned){
+        if(apiLimit<5&&!banned || subscribed&&!banned){
         setCheckResultcolor(false);
         setQuizzArray([]);
         setQuizzIndex(0);

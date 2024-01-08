@@ -6,7 +6,7 @@ const UserCard = ({user,setTrigger}) => {
     const [openPopup,setOpenPopup]=useState(false)
   return (
     <div className='w-full'>
-        {openPopup&& <div className='w-screen'><UserPopup setTrigger={setTrigger} user={user} setOpenPopup={setOpenPopup}/></div>}
+        {openPopup&& <div className=''><UserPopup setTrigger={setTrigger} user={user} setOpenPopup={setOpenPopup}/></div>}
     <button className={`flex w-full ${user.banned ? 'bg-red-900': ' bg-slate-900'} rounded-xl p-3 gap-5 items-center hover:opacity-90`} onClick={()=>setOpenPopup(true)}>
         <div>
             <img src={user.image} className='w-[50px] h-[50px] md:h-[60px] md:w-[60px] rounded-full' alt="" />

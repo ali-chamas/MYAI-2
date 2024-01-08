@@ -92,7 +92,7 @@ const UserPopup = ({user,setOpenPopup,setTrigger}) => {
 
 
   return (
-    <div className='h-screen w-screen flex items-center justify-center fixed top-0 bg-slate-800 bg-opacity-30 backdrop-filter backdrop-blur-lg  lg:text-lg z-50'>
+    <div className='h-screen w-screen  flex items-center justify-center fixed top-0 left-0 bg-slate-800 bg-opacity-30 backdrop-filter backdrop-blur-lg  lg:text-lg z-50'>
 
         <div className={`flex items-center md:p-10 relative p-5 rounded-2xl ${user.banned ? 'bg-red-900': ' bg-slate-900'}`}>
             <div className='flex flex-col md:flex-row gap-3'>

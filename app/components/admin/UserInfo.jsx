@@ -17,19 +17,23 @@ const UserInfo = () => {
     const[filteredUsers,setFilteredUsers]=useState(users)
     const [trigger,setTrigger]=useState(false)
   const {apiLimitContext,setApiLimitContext}=useContext(TriggerContext)
-   
+   const [countTrigger,setCountTrigger]=useState(false)
     const getUsers=async()=>{
       
         try {
             const res=await fetch(`${webUrl}/api/users`);
-            setUsers(await res.json())
-            setFilteredUsers(users)
+            const data=await res.json()
+            setUsers(data)
+            setFilteredUsers(data)
+            setCountTrigger(t=>!t)
         } catch (error) {
             
         }
       }
+
       useEffect(()=>{
         getUsers()
+        
        
         
     },[users.length,trigger,apiLimitContext])
@@ -44,7 +48,7 @@ const UserInfo = () => {
   return (
     <div className='flex flex-col md:flex-row items-center gap-10 md:justify-around px-20'>
       <div className=''>
-      <AdminInfo users={users}/>
+      <AdminInfo users={users} trigger={countTrigger}/>
       </div>
     
     <div className='h-full flex flex-col min-h-[600px] gap-3 py-2 items-center'>
@@ -54,7 +58,7 @@ const UserInfo = () => {
       </div>
       <input type="search" className='bg-slate-700 p-3 oultline-none ' placeholder='search..' onChange={(e)=>searchUser(e.target.value)}  name="" id="" />
       {users.length>0 && 
-        <div className='flex flex-col gap-4 max-h-[500px] overflow-auto'>
+        <div className='flex w-full flex-col gap-4 max-h-[500px] overflow-auto'>
           {filteredUsers.map((user,i)=>
           
           <UserCard user={user} setTrigger={setTrigger}  key={i}/>
