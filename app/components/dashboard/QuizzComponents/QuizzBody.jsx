@@ -7,7 +7,7 @@ import { IoMdRefresh } from 'react-icons/io'
 import { useSession } from 'next-auth/react'
 import { fetchUser, webUrl } from '@/app/fetchFunction/fetching'
 import { TriggerContext } from '@/app/context/triggerContext'
-
+import axios from 'axios'
 const QuizzBody = ({toColor,placeholder}) => {
 
 
@@ -106,15 +106,15 @@ const QuizzBody = ({toColor,placeholder}) => {
         setResult(0)
         setSelectedChoice('')
         const newPrompt=`${prompt}  of ${numberOfQuestions} questions`
+        
+
         try {
           setLoading(true);
-          const res = await fetch(`/api/quizz`
-          ,{method:"POST",headers:{'Content-Type': 'application/json',},body:JSON.stringify(newPrompt)}
+          const res = await axios.post('/api/quizz', { message: newPrompt });
           
           
-          )
-          const data =await res.json()
-         if(res.ok){
+          const data =await res.data
+         if(res.status==200){
           
           setTokens(t=>t+data.usage.total_tokens)
           
