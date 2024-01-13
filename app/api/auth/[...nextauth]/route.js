@@ -20,9 +20,7 @@ export const authoptions={
     ],
     callbacks:{
         async session({session}){
-            const sessionUser = await Users.findOne({
-                email:session.user.email
-            });
+            
             
             return session;
         },
