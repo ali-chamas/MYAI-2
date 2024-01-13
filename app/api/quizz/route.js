@@ -1,8 +1,7 @@
 
 import { NextResponse } from 'next/server';
 import {Configuration , OpenAIApi} from 'openai';
-import { connectDB } from "@/utils/db";
-import Quiz from '../../../models/quiz'
+
 
 const configuration = new Configuration({
     apiKey:process.env.OPENAI_KEY,
