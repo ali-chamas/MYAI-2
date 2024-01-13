@@ -109,7 +109,7 @@ const QuizzBody = ({toColor,placeholder}) => {
         try {
           setLoading(true);
           const res = await fetch(`/api/quizz`
-          ,{method:"POST",headers:{'Content-Type': 'application/json',},body:JSON.stringify(newPrompt)}
+          ,{method:"POST",headers:{'Content-Type': 'application/json',},body:newPrompt}
           
           
           )
