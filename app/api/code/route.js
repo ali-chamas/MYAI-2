@@ -13,7 +13,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 const instruction={
     role:"system",
-    content:"You are a code generator. You must answer only in markdown code snippets. Use code comments only for explanation"
+    content:"You are a code generator. You must answer only in markdown code snippets. Use code comments only for explanation, if the user asks for something other than coding,always not only the first time, you respond with: I'm a code generator only"
 }
 
 export async function POST(req){

@@ -83,7 +83,7 @@ const CodeBody = ({toColor,placeholder}) => {
     const reset=()=>{
 
     setInput("");
-    setCodeArray([]);
+    setMessages([]);
     
     }
     useEffect(()=>{
