@@ -1,22 +1,21 @@
 {
   "name": "myai",
-  "homepage": "https://watwatos.github.io/MYAI-2/",
+
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
+    "lint": "next lint"
+  
   },
   "dependencies": {
     "axios": "^1.6.5",
     "crisp-sdk-web": "^1.0.21",
     "framer-motion": "^10.16.4",
     "fs": "^0.0.1-security",
-    "gh-pages": "^6.1.1",
+    
     "mongodb": "^6.2.0",
     "mongoose": "^8.0.0",
     "next": "14.0.0",
