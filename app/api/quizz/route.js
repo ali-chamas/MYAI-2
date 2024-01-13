@@ -20,7 +20,7 @@ export async function POST(req){
     try{
         
         
-        const message =JSON.stringify(await req.json());
+        const message =await req.json();
 
         const res = await openai.createChatCompletion({
             model:'gpt-3.5-turbo',
