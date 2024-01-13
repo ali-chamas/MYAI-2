@@ -18,36 +18,37 @@ const DashboardLayout =async ({children})=>{
   if(!session){
     redirect('/login')
   }
-  const user = await fetchUser(session.user.email);
+  // const user = await fetchUser(session.user.email);
  
 
   
   return (
     <div className=" h-full">
       <CrispProvider/>
-      {user.user.banned? 
+      {/* {user.user.banned? 
       <div className="h-screen pl-12 flex items-center justify-center">
       <BannedMessage/>
     </div>
-      :
+      : */}
       <div className="flex">
         <div className="fixed top-0 h-screen ">
         <Sidebar/>
         </div>
         <div className="w-[85vw] md:pl-64 lg:pl-40 h-screen">
-          {
+          {/* {
             user.user.api_limit==5 && !user.user.subscribed ?
             <div className="h-screen pl-12 flex items-center justify-center">
             <LimitReached/>
           </div>
             :children
           }
-        
+         */}
+         {children}
         </div>
       
       </div>
      
-    }
+    {/* } */}
       
     </div>
   )
