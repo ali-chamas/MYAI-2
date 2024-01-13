@@ -40,7 +40,7 @@ const CodeBody = ({toColor,placeholder}) => {
         setTimeout(()=>setCopied(''),3000);
       }
       
-      console.log(messages)
+      
     const generateCode=async(userInput)=>{
        
        
@@ -59,13 +59,15 @@ const CodeBody = ({toColor,placeholder}) => {
           
           const data =await  res.data
           setMessages((current) => [...current, userMessage, data.choices[0].message])
-         if(res.ok){
+         
           
-          setTokens(t=>t+data.usage.total_tokens)
-          setApiLimit(a=>a+1)
+          if(res.status=200){
+            setTokens(t=>t+data.usage.total_tokens)
+            setApiLimit(a=>a+1)
+            
+          }
           
-          
-         }
+         
          }
          else{
           alert('sorry limit exceeded')
@@ -115,6 +117,7 @@ const CodeBody = ({toColor,placeholder}) => {
       
       }
     },[tokens])
+    
 
     const editTokens = async(tokens,id)=>{
       
@@ -150,12 +153,12 @@ messages.length >=1 &&
 <div className='flex flex-col-reverse gap-y-4 items-center  md:min-w-[500px] w-auto max-w-full  '>
 
 
-{messages.map(data=>(
+{messages.map((data,i)=>(
   
   
   data.role =='assistant'? 
   
-  <div key={data.content} className='flex gap-3 w-full overflow-auto bg-slate-900 rounded-xl p-3'>
+  <div key={i} className='flex gap-3 w-full overflow-auto bg-slate-900 rounded-xl p-3'>
         <Image width={40} height={40} alt='ai' className='rounded-full max-w-[40px] max-h-[40px]' src={'/logo.png'}/>
         <div>
             
